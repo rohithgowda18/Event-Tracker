@@ -61,12 +61,14 @@ class CodingProfileServiceTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        Map<Platform, CodingPlatformClient> clients = Map.of(
-                Platform.LEETCODE, leetCodeClient,
-                Platform.CODEFORCES, codeforcesClient,
-                Platform.CODECHEF, codeChefClient,
-                Platform.HACKERRANK, hackerRankClient,
-                Platform.GEEKSFORGEEKS, geeksForGeeksClient
+        lenient().when(leetCodeClient.getPlatform()).thenReturn(Platform.LEETCODE);
+        lenient().when(codeforcesClient.getPlatform()).thenReturn(Platform.CODEFORCES);
+        lenient().when(codeChefClient.getPlatform()).thenReturn(Platform.CODECHEF);
+        lenient().when(hackerRankClient.getPlatform()).thenReturn(Platform.HACKERRANK);
+        lenient().when(geeksForGeeksClient.getPlatform()).thenReturn(Platform.GEEKSFORGEEKS);
+
+        List<CodingPlatformClient> clients = List.of(
+                leetCodeClient, codeforcesClient, codeChefClient, hackerRankClient, geeksForGeeksClient
         );
 
         service = new CodingProfileService(accountRepository, statsRepository, activityRepository, clients);

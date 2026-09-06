@@ -26,13 +26,28 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class CodingProfileService {
 
     private final CodingAccountRepository accountRepository;
     private final CodingStatsRepository statsRepository;
     private final CodingActivityRepository activityRepository;
-    private final Map<Platform, CodingPlatformClient> clients;
+    private final Map<Platform, CodingPlatformClient> clients = new EnumMap<>(Platform.class);
+
+    public CodingProfileService(
+            CodingAccountRepository accountRepository,
+            CodingStatsRepository statsRepository,
+            CodingActivityRepository activityRepository,
+            List<CodingPlatformClient> clientList
+    ) {
+        this.accountRepository = accountRepository;
+        this.statsRepository = statsRepository;
+        this.activityRepository = activityRepository;
+        if (clientList != null) {
+            for (CodingPlatformClient client : clientList) {
+                this.clients.put(client.getPlatform(), client);
+            }
+        }
+    }
 
     @Value("${app.coding.verification-expiration-minutes:15}")
     private int verificationExpirationMinutes;
